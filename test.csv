@@ -1,0 +1,6 @@
+CustomerID,ProductID,Category,Price,Quantity
+1,P1,Electronics,500,2
+2,P2,Clothing,100,3
+3,P3,Home Appliances,250,1
+4,P4,Electronics,800,2
+5,P5,Clothing,50,5
