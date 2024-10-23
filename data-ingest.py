@@ -1,17 +1,11 @@
 from pyspark.sql import SparkSession
+import sys
+import json
 
-
-config = {
-    "file_path":"test.csv"
-    "output":"kafka",
-    "bootstrap_servers":"localhost:9092",
-    "topic":"test",
-    "file_format":"csv"
-}
 
 spark = SparkSession.builder.appName("data-ingest").getOrCreate()
 
-def read_file():
+def read_file(config):
     if config["file_format"].lower() == "csv":
         df = spark.read.option("header","true").csv(config["file_path"])
     elif config["file_format"].lower() == "json":
@@ -21,7 +15,7 @@ def read_file():
         exit()
     return df
 
-def write_df():
+def write_df(config):
     target = config['output']
     if target.lower() == "kafka":
         df.selectExpr("CAST(value AS STRING)") \
@@ -43,6 +37,8 @@ def write_df():
         print(f"Invalid target {target}. pls choose postgres/kafka")
 
 
-
-read_file()
-write_df()
+if __name__ == "__main__":
+    config = sys.argv[1]
+    parsed_config = json.loads(config)
+    read_file(parsed_config)
+    write_df(parsed_config)
